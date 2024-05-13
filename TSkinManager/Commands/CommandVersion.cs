@@ -1,7 +1,7 @@
 ﻿using Rocket.API;
 using System.Collections.Generic;
 using System.Reflection;
-using Logger = Tavstal.TSkinManager.Helpers.LoggerHelper;
+using Tavstal.TLibrary.Helpers.Unturned;
 
 namespace Tavstal.TSkinManager.Commands
 {
@@ -16,10 +16,10 @@ namespace Tavstal.TSkinManager.Commands
 
         public void Execute(IRocketPlayer caller, string[] command)
         {
-            Logger.Log("#########################################");
-            Logger.Log(string.Format("# Build Version: {0}", TSkinManager.Instance._Version));
-            Logger.Log(string.Format("# Build Date: {0}", TSkinManager.Instance._BuildDate));
-            Logger.Log("#########################################");
+            TSkinManager.Instance.SendPlainCommandReply(caller, "#########################################");
+            TSkinManager.Instance.SendPlainCommandReply(caller, string.Format("# Build Version: {0}", TSkinManager.Version));
+            TSkinManager.Instance.SendPlainCommandReply(caller, string.Format("# Build Date: {0}", TSkinManager.BuildDate));
+            TSkinManager.Instance.SendPlainCommandReply(caller, "#########################################");
         }
     }
 }

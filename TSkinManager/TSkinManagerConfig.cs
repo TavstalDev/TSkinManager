@@ -1,10 +1,10 @@
-﻿using Rocket.API;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Tavstal.TLibrary.Compatibility;
 using Tavstal.TSkinManager.Compability;
 
 namespace Tavstal.TSkinManager
 {
-    public class TSkinManagerConfig : IRocketPluginConfiguration
+    public class TSkinManagerConfig : ConfigurationBase
     {
         public bool RestrictWeaponSkins;
         public bool RestrictHats;
@@ -16,11 +16,11 @@ namespace Tavstal.TSkinManager
         public bool RestrictMasks;
         public bool ReplaceNotAllowedSkins;
         public string BypassPermission;
-        public List<Event> eventSkins;
+        public List<Event> EventSkins;
         public List<CustomSkin> CustomSkins;
         public List<string> AllowedSkinColorsHex;
 
-        public void LoadDefaults()
+        public override void LoadDefaults()
         {
             RestrictWeaponSkins = false;
             RestrictGlasses = true;
@@ -32,18 +32,18 @@ namespace Tavstal.TSkinManager
             RestrictMasks = true;
             ReplaceNotAllowedSkins = true;
             BypassPermission = "skinmanager.bypass";
-            eventSkins = new List<Event>
+            EventSkins = new List<Event>
             {
-                new Event { EventName = "Christmas", EventStartDayOfTheYear = 358, EventEndDayOfTheYear = 360, EventSkins = new List<EventSkin>
+                new Event { EventName = "Christmas", StartDayOfTheYear = 358, EndDayOfTheYear = 360, Skins = new List<EventSkin>
                 {
                     new EventSkin() { Hat = 63501, Backpack = 867, Glasses = 0, Mask = 64601, Pants = 63701, Shirt = 63601, Vest = 64801, Weapons = new List<int> { 64101, 64001, 803, 63901, 63801, 30043, 804 } },
                     new EventSkin() { Hat = 0, Backpack = 0, Glasses = 0, Mask = 64201, Pants = 64401, Shirt = 64301, Vest = 0, Weapons = new List<int> { 64101, 64001, 803, 63901, 63801, 30043, 804 } }
                 }},
-                new Event { EventName = "Halloween", EventStartDayOfTheYear = 304, EventEndDayOfTheYear = 306, EventSkins = new List<EventSkin>
+                new Event { EventName = "Halloween", StartDayOfTheYear = 304, EndDayOfTheYear = 306, Skins = new List<EventSkin>
                 {
                     new EventSkin() { Hat = 62401, Backpack = 62501, Glasses = 0, Mask = 40501, Pants = 62701, Shirt = 62601, Vest = 0, Weapons = new List<int> { 40801, 74401, 74601, 74501, 74301, 40201, 40301, 776 } }
                 }},
-                new Event { EventName = "Test", EventStartDayOfTheYear = 1, EventEndDayOfTheYear = 60, EventSkins = new List<EventSkin>
+                new Event { EventName = "Test", StartDayOfTheYear = 1, EndDayOfTheYear = 60, Skins = new List<EventSkin>
                 {
                     new EventSkin() { Hat = 1069, Backpack = 0, Glasses = 0, Mask = 1080, Pants = 1068, Shirt = 1071, Vest = 1070, Weapons = new List<int> { 68609, 500405, 500101, 500804, 61908, 67911, 400026, 400027 } }
                 }}

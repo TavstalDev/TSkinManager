@@ -1,41 +1,23 @@
 ﻿using Rocket.API.Collections;
-using Rocket.Core.Plugins;
 using Rocket.Unturned.Permissions;
 using SDG.Unturned;
 using Steamworks;
 using System;
 using System.Linq;
 using System.Reflection;
+using Tavstal.TLibrary.Compatibility;
+using Tavstal.TLibrary.Helpers.General;
 using Tavstal.TSkinManager.Compability;
 using Tavstal.TSkinManager.Helpers;
 using UnityEngine;
-using Logger = Tavstal.TSkinManager.Helpers.LoggerHelper;
 
 namespace Tavstal.TSkinManager
 {
-    public class TSkinManager : RocketPlugin<TSkinManagerConfig>
+    public class TSkinManager : PluginBase<TSkinManagerConfig>
     {
-        public static TSkinManager Instance;
-        internal System.Version _Version => Assembly.GetExecutingAssembly().GetName().Version;
-        internal DateTime _BuildDate => new DateTime(2000, 1, 1).AddDays(_Version.Build).AddSeconds(_Version.Revision * 2);
+        public static new TSkinManager Instance;
 
-        private System.Random random;
-        private object syncObj = new object();
-        private void InitRandomNumber(int seed)
-        {
-            random = new System.Random(seed);
-        }
-        private int GenerateRandomNumber(int max)
-        {
-            lock (syncObj)
-            {
-                if (random == null)
-                    random = new System.Random(); // Or exception...
-                return random.Next(max);
-            }
-        }
-
-        protected override void Load()
+        public override void OnLoad()
         {
             Instance = this;
 
@@ -51,15 +33,15 @@ namespace Tavstal.TSkinManager
             Logger.Log("# Discord: Tavstal#6189");
             Logger.Log("# Website: https://redstoneplugins.com");
             Logger.Log("#########################################");
-            Logger.Log(string.Format("# Build Version: {0}", _Version));
-            Logger.Log(string.Format("# Build Date: {0}", _BuildDate));
+            Logger.Log(string.Format("# Build Version: {0}", Version));
+            Logger.Log(string.Format("# Build Date: {0}", BuildDate));
             Logger.Log("#########################################");
             Logger.Log("# Loading TSKinManager...");
 
             try
             {
                 UnturnedPermissions.OnJoinRequested += PlayerConnectPending;
-                var ev = Configuration.Instance.eventSkins.FirstOrDefault(x => x.EventStartDayOfTheYear <= DateTime.Now.DayOfYear && x.EventEndDayOfTheYear > DateTime.Now.DayOfYear);
+                var ev = Config.EventSkins.FirstOrDefault(x => x.StartDayOfTheYear <= DateTime.Now.DayOfYear && x.EndDayOfTheYear > DateTime.Now.DayOfYear);
                 string even = "None";
                 if (ev != null)
                     even = ev.EventName;
@@ -74,7 +56,7 @@ namespace Tavstal.TSkinManager
            
         }
 
-        protected override void Unload()
+        public override void OnUnLoad()
         {
             UnturnedPermissions.OnJoinRequested -= PlayerConnectPending;
             Logger.Log("# TSkinManager has been unloaded");
@@ -86,7 +68,6 @@ namespace Tavstal.TSkinManager
             {
                 if (steamPending.playerID.steamID == Player)
                 {
-                    var config = Configuration.Instance;
                     float r = steamPending.skin.r;
                     float g = steamPending.skin.g;
                     float b = steamPending.skin.b;
@@ -94,10 +75,10 @@ namespace Tavstal.TSkinManager
 
                     string playerColorHex = ColorUtility.ToHtmlStringRGBA(new Color (r, g, b, w));
 
-                    if (!config.AllowedSkinColorsHex.Contains(playerColorHex) && config.ReplaceNotAllowedSkins)
+                    if (!Config.AllowedSkinColorsHex.Contains(playerColorHex) && Config.ReplaceNotAllowedSkins)
                     {
-                        int index = GenerateRandomNumber(config.AllowedSkinColorsHex.Count - 1);
-                        string hexColor = config.AllowedSkinColorsHex.ElementAt(index);
+                        int index = MathHelper.Next(Config.AllowedSkinColorsHex.Count - 1);
+                        string hexColor = Config.AllowedSkinColorsHex.ElementAt(index);
                         if (!hexColor.Contains('#'))
                             hexColor = "#" + hexColor;
 
@@ -109,7 +90,7 @@ namespace Tavstal.TSkinManager
                         steamPending.GetType().GetField("_skin", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(steamPending, color);
                     }
 
-                    var skin = config.CustomSkins.FirstOrDefault(x => x.Player == steamPending.playerID.steamID.m_SteamID);
+                    CustomSkin skin = Config.CustomSkins.FirstOrDefault(x => x.Player == steamPending.playerID.steamID.m_SteamID);
                     if (skin != null)
                     {
                         steamPending.hatItem = skin.Hat;
@@ -123,13 +104,13 @@ namespace Tavstal.TSkinManager
                         return;
                     }
 
-                    var ev = config.eventSkins.FirstOrDefault(x => x.EventStartDayOfTheYear <= DateTime.Now.DayOfYear && x.EventEndDayOfTheYear > DateTime.Now.DayOfYear);
+                    Event ev = Config.EventSkins.FirstOrDefault(x => x.StartDayOfTheYear <= DateTime.Now.DayOfYear && x.EndDayOfTheYear > DateTime.Now.DayOfYear);
                     if (ev != null)
                     {
-                        if (ev.EventSkins.Count > 0)
+                        if (ev.Skins.Count > 0)
                         {
-                            int num = GenerateRandomNumber(ev.EventSkins.Count - 1);
-                            EventSkin ev2 = ev.EventSkins.ElementAt(num);
+                            int num = MathHelper.Next(ev.Skins.Count - 1);
+                            EventSkin ev2 = ev.Skins.ElementAt(num);
                             steamPending.hatItem = ev2.Hat;
                             steamPending.maskItem = ev2.Mask;
                             steamPending.glassesItem = ev2.Glasses;
@@ -142,52 +123,52 @@ namespace Tavstal.TSkinManager
                         }
                     }
 
-                    if (PermissionHelper.HasPermission(Player, config.BypassPermission))
+                    if (PermissionHelper.HasPermission(Player, Config.BypassPermission))
                         return;
 
-                    if (config.RestrictWeaponSkins)
+                    if (Config.RestrictWeaponSkins)
                     {
                         steamPending.skinItems = new int[0];
                         steamPending.packageSkins = new ulong[0];
                     }
 
-                    if (config.RestrictBackpacks)
+                    if (Config.RestrictBackpacks)
                     {
                         steamPending.packageBackpack = 0UL;
                         steamPending.backpackItem = 0;
                     }
 
-                    if (config.RestrictHats)
+                    if (Config.RestrictHats)
                     {
                         steamPending.packageHat = 0UL;
                         steamPending.hatItem = 0;
                     }
 
-                    if (config.RestrictMasks)
+                    if (Config.RestrictMasks)
                     {
                         steamPending.packageMask = 0UL;
                         steamPending.maskItem = 0;
                     }
 
-                    if (config.RestrictPants)
+                    if (Config.RestrictPants)
                     {
                         steamPending.packagePants = 0UL;
                         steamPending.pantsItem = 0;
                     }
 
-                    if (config.RestrictGlasses)
+                    if (Config.RestrictGlasses)
                     {
                         steamPending.glassesItem = 0;
                         steamPending.packageGlasses = 0UL;
                     }
 
-                    if (config.RestrictShirts)
+                    if (Config.RestrictShirts)
                     {
                         steamPending.packageShirt = 0UL;
                         steamPending.shirtItem = 0;
                     }
 
-                    if (config.RestrictVests)
+                    if (Config.RestrictVests)
                     {
                         steamPending.packageVest = 0UL;
                         steamPending.vestItem = 0;

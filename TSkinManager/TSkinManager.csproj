@@ -81,6 +81,9 @@
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="TLibrary">
+      <HintPath>..\Libraries\TLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>..\Libraries\UnityEngine.dll</HintPath>
       <Private>False</Private>
@@ -95,7 +98,6 @@
     <Compile Include="Models\Event.cs" />
     <Compile Include="Models\EventSkin.cs" />
     <Compile Include="Models\CustomSkin.cs" />
-    <Compile Include="Helpers\LoggerHelper.cs" />
     <Compile Include="Helpers\PermissionHelper.cs" />
     <Compile Include="TSkinManagerConfig.cs" />
     <Compile Include="TSkinManager.cs" />

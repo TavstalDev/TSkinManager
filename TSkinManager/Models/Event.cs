@@ -5,8 +5,8 @@ namespace Tavstal.TSkinManager.Compability
     public class Event
     {
         public string EventName { get; set; }
-        public int EventStartDayOfTheYear { get; set; }
-        public int EventEndDayOfTheYear { get; set; }
-        public List<EventSkin> EventSkins { get; set; }
+        public int StartDayOfTheYear { get; set; }
+        public int EndDayOfTheYear { get; set; }
+        public List<EventSkin> Skins { get; set; }
     }
 }
