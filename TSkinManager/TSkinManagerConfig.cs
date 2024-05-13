@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 using Tavstal.TLibrary.Compatibility;
 using Tavstal.TSkinManager.Compability;
 
@@ -6,18 +7,31 @@ namespace Tavstal.TSkinManager
 {
     public class TSkinManagerConfig : ConfigurationBase
     {
+        [JsonProperty(Order = 3)]
         public bool RestrictWeaponSkins;
+        [JsonProperty(Order = 4)]
         public bool RestrictHats;
+        [JsonProperty(Order = 5)]
         public bool RestrictGlasses;
+        [JsonProperty(Order = 6)]
         public bool RestrictShirts;
+        [JsonProperty(Order = 7)]
         public bool RestrictPants;
+        [JsonProperty(Order = 8)]
         public bool RestrictVests;
+        [JsonProperty(Order = 9)]
         public bool RestrictBackpacks;
+        [JsonProperty(Order = 10)]
         public bool RestrictMasks;
+        [JsonProperty(Order = 11)]
         public bool ReplaceNotAllowedSkins;
+        [JsonProperty(Order = 12)]
         public string BypassPermission;
+        [JsonProperty(Order = 13)]
         public List<Event> EventSkins;
+        [JsonProperty(Order = 14)]
         public List<CustomSkin> CustomSkins;
+        [JsonProperty(Order = 15)]
         public List<string> AllowedSkinColorsHex;
 
         public override void LoadDefaults()

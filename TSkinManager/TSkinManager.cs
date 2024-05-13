@@ -176,11 +176,5 @@ namespace Tavstal.TSkinManager
                 }
             }
         }
-
-        public override TranslationList DefaultTranslations =>
-            new TranslationList
-            {
-                { "", "" },
-            };
     }
 }
