@@ -17,8 +17,8 @@ namespace Tavstal.TSkinManager.Commands
         public void Execute(IRocketPlayer caller, string[] command)
         {
             TSkinManager.Instance.SendPlainCommandReply(caller, "#########################################");
-            TSkinManager.Instance.SendPlainCommandReply(caller, string.Format("# Build Version: {0}", TSkinManager.Version));
-            TSkinManager.Instance.SendPlainCommandReply(caller, string.Format("# Build Date: {0}", TSkinManager.BuildDate));
+            TSkinManager.Instance.SendPlainCommandReply(caller, $"# Build Version: {TSkinManager.Version}");
+            TSkinManager.Instance.SendPlainCommandReply(caller, $"# Build Date: {TSkinManager.BuildDate}");
             TSkinManager.Instance.SendPlainCommandReply(caller, "#########################################");
         }
     }

@@ -4,9 +4,9 @@ using Steamworks;
 using System;
 using System.Linq;
 using System.Reflection;
-using Tavstal.TLibrary.Compatibility;
+using Tavstal.TLibrary.Models.Plugin;
 using Tavstal.TLibrary.Helpers.General;
-using Tavstal.TSkinManager.Compability;
+using Tavstal.TSkinManager.Models;
 using Tavstal.TSkinManager.Helpers;
 using UnityEngine;
 
@@ -14,7 +14,7 @@ namespace Tavstal.TSkinManager
 {
     public class TSkinManager : PluginBase<TSkinManagerConfig>
     {
-        public static new TSkinManager Instance;
+        public new static TSkinManager Instance;
 
         public override void OnLoad()
         {
@@ -32,19 +32,14 @@ namespace Tavstal.TSkinManager
             Logger.Log("# Discord: Tavstal#6189");
             Logger.Log("# Website: https://redstoneplugins.com");
             Logger.Log("#########################################");
-            Logger.Log(string.Format("# Build Version: {0}", Version));
-            Logger.Log(string.Format("# Build Date: {0}", BuildDate));
+            Logger.Log($"# Build Version: {Version}");
+            Logger.Log($"# Build Date: {BuildDate}");
             Logger.Log("#########################################");
             Logger.Log("# Loading TSKinManager...");
 
             try
             {
                 UnturnedPermissions.OnJoinRequested += PlayerConnectPending;
-                var ev = Config.EventSkins.FirstOrDefault(x => x.StartDayOfTheYear <= DateTime.Now.DayOfYear && x.EndDayOfTheYear > DateTime.Now.DayOfYear);
-                string even = "None";
-                if (ev != null)
-                    even = ev.EventName;
-
                 Logger.Log("# TSKinManager has been loaded.");
             }
             catch (Exception ex)
@@ -85,8 +80,8 @@ namespace Tavstal.TSkinManager
                             hexColor += "FF";
 
                         ColorUtility.TryParseHtmlString(hexColor, out Color color);
-                        Logger.LogWarning(String.Format("{0} does not have acceptable skin color. ({1} -> {2})", steamPending.playerID.characterName, playerColorHex, hexColor));
-                        steamPending.GetType().GetField("_skin", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(steamPending, color);
+                        Logger.LogWarning($"{steamPending.playerID.characterName} does not have acceptable skin color. ({playerColorHex} -> {hexColor})");
+                        steamPending.GetType().GetField("_skin", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(steamPending, color);
                     }
 
                     CustomSkin skin = Config.CustomSkins.FirstOrDefault(x => x.Player == steamPending.playerID.steamID.m_SteamID);
@@ -127,8 +122,8 @@ namespace Tavstal.TSkinManager
 
                     if (Config.RestrictWeaponSkins)
                     {
-                        steamPending.skinItems = new int[0];
-                        steamPending.packageSkins = new ulong[0];
+                        steamPending.skinItems = Array.Empty<int>();
+                        steamPending.packageSkins = Array.Empty<ulong>();
                     }
 
                     if (Config.RestrictBackpacks)

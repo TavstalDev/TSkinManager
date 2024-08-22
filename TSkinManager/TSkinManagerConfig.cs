@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
-using Tavstal.TLibrary.Compatibility;
-using Tavstal.TSkinManager.Compability;
+using Tavstal.TLibrary.Models.Plugin;
+using Tavstal.TSkinManager.Models;
 
 namespace Tavstal.TSkinManager
 {
@@ -34,7 +34,7 @@ namespace Tavstal.TSkinManager
         [JsonProperty(Order = 15)]
         public List<string> AllowedSkinColorsHex;
 
-        public override void LoadDefaults()
+        public new void LoadDefaults()
         {
             RestrictWeaponSkins = false;
             RestrictGlasses = true;

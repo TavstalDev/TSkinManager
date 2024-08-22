@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Tavstal.TSkinManager.Compability
+namespace Tavstal.TSkinManager.Models
 {
     public class CustomSkin
     {

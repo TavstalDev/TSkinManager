@@ -21,10 +21,10 @@ namespace Tavstal.TSkinManager.Helpers
             try
             {
                 FieldInfo helperFieldInfo = PermissionsManager.GetType().GetField("helper", BindingFlags.NonPublic | BindingFlags.Instance);
-                object helperObject = helperFieldInfo.GetValue(PermissionsManager);
-                Type helperType = helperObject.GetType();
-                Asset<RocketPermissions> permissions = (Asset<RocketPermissions>)(helperType.GetField("permissions", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(helperObject));
-                return permissions.Instance.DefaultGroup;
+                object helperObject = helperFieldInfo?.GetValue(PermissionsManager);
+                Type helperType = helperObject?.GetType();
+                Asset<RocketPermissions> permissions = (Asset<RocketPermissions>)(helperType?.GetField("permissions", BindingFlags.NonPublic | BindingFlags.Instance)?.GetValue(helperObject));
+                return permissions?.Instance.DefaultGroup;
             }
             catch (Exception ex)
             {
