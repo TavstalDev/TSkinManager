@@ -34,7 +34,7 @@ namespace Tavstal.TSkinManager
         [JsonProperty(Order = 15)]
         public List<string> AllowedSkinColorsHex;
 
-        public new void LoadDefaults()
+        public override void LoadDefaults()
         {
             RestrictWeaponSkins = false;
             RestrictGlasses = true;
