@@ -36,6 +36,9 @@ namespace Tavstal.TSkinManager
 
         public override void LoadDefaults()
         {
+            DebugMode = false;
+            Locale = "en";
+            DownloadLocalePacks = true;
             RestrictWeaponSkins = false;
             RestrictGlasses = true;
             RestrictHats = true;
