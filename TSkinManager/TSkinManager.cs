@@ -12,6 +12,7 @@ using UnityEngine;
 
 namespace Tavstal.TSkinManager
 {
+    // ReSharper disable once InconsistentNaming
     public class TSkinManager : PluginBase<TSkinManagerConfig>
     {
         public new static TSkinManager Instance;
@@ -56,11 +57,11 @@ namespace Tavstal.TSkinManager
             Logger.Log("# TSkinManager has been unloaded");
         }
 
-        public void PlayerConnectPending(CSteamID Player, ref ESteamRejection? REj)
+        public void PlayerConnectPending(CSteamID player, ref ESteamRejection? rej)
         {
             foreach (SteamPending steamPending in Provider.pending)
             {
-                if (steamPending.playerID.steamID == Player)
+                if (steamPending.playerID.steamID == player)
                 {
                     float r = steamPending.skin.r;
                     float g = steamPending.skin.g;
@@ -117,7 +118,7 @@ namespace Tavstal.TSkinManager
                         }
                     }
 
-                    if (PermissionHelper.HasPermission(Player, Config.BypassPermission))
+                    if (PermissionHelper.HasPermission(player, Config.BypassPermission))
                         return;
 
                     if (Config.RestrictWeaponSkins)

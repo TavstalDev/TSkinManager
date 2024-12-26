@@ -5,6 +5,7 @@ using Tavstal.TSkinManager.Models;
 
 namespace Tavstal.TSkinManager
 {
+    // ReSharper disable once InconsistentNaming
     public class TSkinManagerConfig : ConfigurationBase
     {
         [JsonProperty(Order = 3)]
