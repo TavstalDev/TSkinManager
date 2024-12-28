@@ -15,7 +15,7 @@ namespace Tavstal.TSkinManager
     // ReSharper disable once InconsistentNaming
     public class TSkinManager : PluginBase<TSkinManagerConfig>
     {
-        public new static TSkinManager Instance;
+        public static TSkinManager Instance;
 
         public override void OnLoad()
         {
