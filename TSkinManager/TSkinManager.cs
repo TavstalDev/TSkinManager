@@ -21,22 +21,27 @@ namespace Tavstal.TSkinManager
         {
             Instance = this;
 
-            Logger.LogWarning("████████╗░██████╗██╗░░██╗██╗███╗░░██╗███╗░░░███╗███╗░░██╗░██████╗░");
-            Logger.LogWarning("╚══██╔══╝██╔════╝██║░██╔╝██║████╗░██║████╗░████║████╗░██║██╔════╝░");
-            Logger.LogWarning("░░░██║░░░╚█████╗░█████═╝░██║██╔██╗██║██╔████╔██║██╔██╗██║██║░░██╗░");
-            Logger.LogWarning("░░░██║░░░░╚═══██╗██╔═██╗░██║██║╚████║██║╚██╔╝██║██║╚████║██║░░╚██╗");
-            Logger.LogWarning("░░░██║░░░██████╔╝██║░╚██╗██║██║░╚███║██║░╚═╝░██║██║░╚███║╚██████╔╝");
-            Logger.LogWarning("░░░╚═╝░░░╚═════╝░╚═╝░░╚═╝╚═╝╚═╝░░╚══╝╚═╝░░░░░╚═╝╚═╝░░╚══╝░╚═════╝░");
-            Logger.Log("#########################################");
-            Logger.Log("# Thanks for using my plugin");
-            Logger.Log("# Plugin Created By Tavstal");
-            Logger.Log("# Discord: Tavstal#6189");
-            Logger.Log("# Website: https://redstoneplugins.com");
-            Logger.Log("#########################################");
-            Logger.Log($"# Build Version: {Version}");
-            Logger.Log($"# Build Date: {BuildDate}");
-            Logger.Log("#########################################");
-            Logger.Log("# Loading TSKinManager...");
+            Logger.Log("████████╗░██████╗██╗░░██╗██╗███╗░░██╗███╗░░░███╗███╗░░██╗░██████╗░", ConsoleColor.Cyan, prefix: null);
+            Logger.Log("╚══██╔══╝██╔════╝██║░██╔╝██║████╗░██║████╗░████║████╗░██║██╔════╝░", ConsoleColor.Cyan, prefix: null);
+            Logger.Log("░░░██║░░░╚█████╗░█████═╝░██║██╔██╗██║██╔████╔██║██╔██╗██║██║░░██╗░", ConsoleColor.Cyan, prefix: null);
+            Logger.Log("░░░██║░░░░╚═══██╗██╔═██╗░██║██║╚████║██║╚██╔╝██║██║╚████║██║░░╚██╗", ConsoleColor.Cyan, prefix: null);
+            Logger.Log("░░░██║░░░██████╔╝██║░╚██╗██║██║░╚███║██║░╚═╝░██║██║░╚███║╚██████╔╝", ConsoleColor.Cyan, prefix: null);
+            Logger.Log("░░░╚═╝░░░╚═════╝░╚═╝░░╚═╝╚═╝╚═╝░░╚══╝╚═╝░░░░░╚═╝╚═╝░░╚══╝░╚═════╝░", ConsoleColor.Cyan, prefix: null);
+            Logger.Log("#########################################", prefix: null);
+            Logger.Log("#       Thanks for using this plugin!   #", prefix: null);
+            Logger.Log("#########################################", prefix: null);
+            Logger.Log("# Developed By: Tavstal", prefix: null);
+            Logger.Log("# Discord:      @Tavstal", prefix: null);
+            Logger.Log("# Website:      https://redstoneplugins.com", prefix: null);
+            Logger.Log("# My GitHub:    https://tavstaldev.github.io", prefix: null);
+            Logger.Log("#########################################", prefix: null);
+            Logger.Log($"# Plugin Version:    {Version}", prefix: null);
+            Logger.Log($"# Build Date:        {BuildDate}", prefix: null);
+            Logger.Log($"# TLibrary Version:  {LibraryVersion}", prefix: null);
+            Logger.Log("#########################################", prefix: null);
+            Logger.Log("# Found an issue or have a suggestion?", prefix: null);
+            Logger.Log("# Report it here: https://github.com/TavstalDev/TSkingManager/issues", prefix: null); 
+            Logger.Log("#########################################", prefix: null);
 
             try
             {
@@ -45,8 +50,8 @@ namespace Tavstal.TSkinManager
             }
             catch (Exception ex)
             {
-                Logger.LogException("# Failed to load TSKinManager...");
-                Logger.LogError(ex);
+                Logger.Exception("# Failed to load TSKinManager...");
+                Logger.Error(ex);
             }
            
         }
@@ -81,7 +86,7 @@ namespace Tavstal.TSkinManager
                             hexColor += "FF";
 
                         ColorUtility.TryParseHtmlString(hexColor, out Color color);
-                        Logger.LogWarning($"{steamPending.playerID.characterName} does not have acceptable skin color. ({playerColorHex} -> {hexColor})");
+                        Logger.Warning($"{steamPending.playerID.characterName} does not have acceptable skin color. ({playerColorHex} -> {hexColor})");
                         steamPending.GetType().GetField("_skin", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(steamPending, color);
                     }
 
