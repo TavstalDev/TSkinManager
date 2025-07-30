@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Logger = Rocket.Core.Logging.Logger;
 
 namespace Tavstal.TSkinManager.Helpers
 {
@@ -43,7 +42,8 @@ namespace Tavstal.TSkinManager.Helpers
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex.ToString());
+                TSkinManager.Logger.Exception("Failed to retrieve default group ID from permissions manager.");
+                TSkinManager.Logger.Error(ex.ToString());
             }
             return string.Empty;
         }
@@ -68,7 +68,8 @@ namespace Tavstal.TSkinManager.Helpers
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex.ToString());
+                TSkinManager.Logger.Exception("Failed to retrieve permission groups from permissions manager.");
+                TSkinManager.Logger.Error(ex.ToString());
             }
 
             return new List<RocketPermissionsGroup>();
