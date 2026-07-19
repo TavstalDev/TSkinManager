@@ -3,101 +3,96 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2AB57103-386B-449A-B21C-34CB70F42E54}</ProjectGuid>
+    <ProjectGuid>{2ab57103-386b-449a-b21c-34cb70f42e54}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Tavstal.TSkinManager</RootNamespace>
-    <AssemblyName>TSkinManager</AssemblyName>
     <TargetFramework>net48</TargetFramework>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+
+    <!-- Naming -->
+    <AssemblyName>TSkinManager</AssemblyName>
+    <RootNamespace>Tavstal.TSkinManager</RootNamespace>
+    <Product>TSkinManager</Product>
+    <Company>Tavstal</Company>
+    <Copyright>Copyright © 2020-2026 Tavstal</Copyright>
+    <Description>A basic cosmetic and skin restrictor plugin. Ideal for roleplay servers.</Description>
+
+    <!-- Version -->
+    <Version>3.3.0</Version>
+    <AssemblyVersion>3.3.0.0</AssemblyVersion>
+    <FileVersion>3.3.0.0</FileVersion>
+    <BuildDate>$([System.DateTime]::UtcNow.ToString("yyyy-MM-dd HH:mm:ss"))</BuildDate>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+
+    <!-- Config -->
+    <LangVersion>8.0</LangVersion>
+    <Nullable>enable</Nullable>
     <FileAlignment>512</FileAlignment>
-    <Deterministic>false</Deterministic>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <Deterministic>true</Deterministic>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
   </PropertyGroup>
+
+  <!-- Custom Metadata -->
+  <ItemGroup>
+    <AssemblyMetadata Include="BuildDate" Value="$(BuildDate)" />
+  </ItemGroup>
+
+  <!-- Libraries -->
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\Libraries\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\assets\libraries\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="com.rlabrecque.steamworks.net">
-      <HintPath>..\Libraries\com.rlabrecque.steamworks.net.dll</HintPath>
+      <HintPath>..\assets\libraries\com.rlabrecque.steamworks.net.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Newtonsoft.Json, Version=13.0.1.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Libraries\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="MySqlConnector">
+      <HintPath>..\assets\libraries\MySqlConnector.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="RL-RestSharp">
-      <HintPath>..\Libraries\RL-RestSharp.dll</HintPath>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\assets\libraries\Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Rocket.API">
-      <HintPath>..\Libraries\Rocket.API.dll</HintPath>
+      <HintPath>..\assets\libraries\Rocket.API.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Rocket.Core">
-      <HintPath>..\Libraries\Rocket.Core.dll</HintPath>
+      <HintPath>..\assets\libraries\Rocket.Core.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Rocket.Unturned">
-      <HintPath>..\Libraries\Rocket.Unturned.dll</HintPath>
+      <HintPath>..\assets\libraries\Rocket.Unturned.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="SDG.NetTransport">
-      <HintPath>..\Libraries\SDG.NetTransport.dll</HintPath>
+      <HintPath>..\assets\libraries\SDG.NetTransport.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <!--<Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />-->
     <Reference Include="TLibrary">
-      <HintPath>..\Libraries\TLibrary.dll</HintPath>
+      <HintPath>..\assets\libraries\TLibrary.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>..\Libraries\UnityEngine.dll</HintPath>
+      <HintPath>..\assets\libraries\UnityEngine.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\Libraries\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>..\assets\libraries\UnityEngine.CoreModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.PhysicsModule">
+      <HintPath>..\assets\libraries\UnityEngine.PhysicsModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestModule">
+      <HintPath>..\assets\libraries\UnityEngine.UnityWebRequestModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="YamlDotNet">
+      <HintPath>..\assets\libraries\YamlDotNet.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
-  <!-- Visual Studio
-  <ItemGroup>
-    <Compile Include="Commands\CommandVersion.cs" />
-    <Compile Include="Models\Event.cs" />
-    <Compile Include="Models\EventSkin.cs" />
-    <Compile Include="Models\CustomSkin.cs" />
-    <Compile Include="Helpers\PermissionHelper.cs" />
-    <Compile Include="TSkinManagerConfig.cs" />
-    <Compile Include="TSkinManager.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-   -->
 </Project>
