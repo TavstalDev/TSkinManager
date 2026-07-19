@@ -1,18 +1,56 @@
 ﻿using System.Collections.Generic;
+using YamlDotNet.Serialization;
 
 namespace Tavstal.TSkinManager.Models
 {
+    /// <summary>
+    /// Represents a cosmetic loadout that can be assigned to players during a time-based event.
+    /// </summary>
     public class EventSkin
     {
+        /// <summary>Item asset ID for the hat slot.</summary>
+        [YamlMember(Order = 0)]
         public int Hat { get; set; }
+        
+        /// <summary>Item asset ID for the glasses slot.</summary>
+        [YamlMember(Order = 1)]
         public int Glasses { get; set; }
+        
+        /// <summary>Item asset ID for the mask slot.</summary>
+        [YamlMember(Order = 2)]
         public int Mask { get; set; }
+        
+        /// <summary>Item asset ID for the backpack slot.</summary>
+        [YamlMember(Order = 3)]
         public int Backpack { get; set; }
+        
+        /// <summary>Item asset ID for the shirt slot.</summary>
+        [YamlMember(Order = 4)]
         public int Shirt { get; set; }
+        
+        /// <summary>Item asset ID for the vest slot.</summary>
+        [YamlMember(Order = 5)]
         public int Vest { get; set; }
+        
+        /// <summary>Item asset ID for the pants slot.</summary>
+        [YamlMember(Order = 6)]
         public int Pants { get; set; }
+        
+        /// <summary>Asset IDs of weapon skins to apply.</summary>
+        [YamlMember(Order = 7)]
         public List<int> Weapons { get; set; }
 
+        /// <summary>
+        /// Initializes a new event skin with all slots specified.
+        /// </summary>
+        /// <param name="hat">Hat asset ID.</param>
+        /// <param name="glasses">Glasses asset ID.</param>
+        /// <param name="mask">Mask asset ID.</param>
+        /// <param name="backpack">Backpack asset ID.</param>
+        /// <param name="shirt">Shirt asset ID.</param>
+        /// <param name="vest">Vest asset ID.</param>
+        /// <param name="pants">Pants asset ID.</param>
+        /// <param name="weapons">Weapon skin asset IDs.</param>
         public EventSkin(int hat, int glasses, int mask, int backpack, int shirt, int vest, int pants, List<int> weapons)
         {
             Hat = hat;
@@ -25,6 +63,12 @@ namespace Tavstal.TSkinManager.Models
             Weapons = weapons;
         }
 
-        public EventSkin() { }
+        /// <summary>
+        /// Initializes an empty event skin with default values.
+        /// </summary>
+        public EventSkin()
+        {
+            Weapons = new List<int>();
+        }
     }
 }
