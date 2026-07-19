@@ -4,64 +4,95 @@ using Steamworks;
 using System;
 using System.Linq;
 using System.Reflection;
+using System.Text;
+using Tavstal.TLibrary.Extensions;
 using Tavstal.TLibrary.Models.Plugin;
 using Tavstal.TLibrary.Helpers.General;
+using Tavstal.TLibrary.Models.Logging;
 using Tavstal.TSkinManager.Models;
 using Tavstal.TSkinManager.Helpers;
 using UnityEngine;
 
 namespace Tavstal.TSkinManager
 {
-    // ReSharper disable once InconsistentNaming
+    /// <summary>
+    /// Core plugin class for TSkinManager. Handles cosmetic enforcement including
+    /// skin color filtering, custom player skins, time-based event skins, and slot restrictions.
+    /// </summary>
     public class TSkinManager : PluginBase<TSkinManagerConfig>
     {
-        public static TSkinManager Instance;
-
-        public override void OnLoad()
+        /// <summary>
+        /// Singleton instance of the plugin.
+        /// </summary>
+        public static TSkinManager Instance { get; private set; } = null!;
+        
+        /// <summary>
+        /// Prints the plugin banner with version and build information to the console.
+        /// </summary>
+        public override void OnPreLoad()
         {
             Instance = this;
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("────────────────────────────────────────────────────────");
+            sb.AppendLine();
+            sb.AppendLine("████████╗░██████╗██╗░░██╗██╗███╗░░██╗███╗░░░███╗███╗░░██╗░██████╗░");
+            sb.AppendLine("╚══██╔══╝██╔════╝██║░██╔╝██║████╗░██║████╗░████║████╗░██║██╔════╝░");
+            sb.AppendLine("░░░██║░░░╚█████╗░█████═╝░██║██╔██╗██║██╔████╔██║██╔██╗██║██║░░██╗░");
+            sb.AppendLine("░░░██║░░░░╚═══██╗██╔═██╗░██║██║╚████║██║╚██╔╝██║██║╚████║██║░░╚██╗");
+            sb.AppendLine("░░░██║░░░██████╔╝██║░╚██╗██║██║░╚███║██║░╚═╝░██║██║░╚███║╚██████╔╝");
+            sb.AppendLine("░░░╚═╝░░░╚═════╝░╚═╝░░╚═╝╚═╝╚═╝░░╚══╝╚═╝░░░░░╚═╝╚═╝░░╚══╝░╚═════╝░");
+            sb.AppendLine();
+            sb.AppendLine("[ About ]");
+            sb.AppendLine(" ▸ Developer : Tavstal");
+            sb.AppendLine(" ▸ Discord   : @Tavstal");
+            sb.AppendLine(" ▸ Website   : https://redstoneplugins.com");
+            sb.AppendLine(" ▸ GitHub    : https://github.com/TavstalDev");
+            sb.AppendLine();
+            sb.AppendLine("[ Build ]");
+            sb.AppendLine($" ▸ Version   : {Version}");
+            sb.AppendLine($" ▸ Build Date: {BuildDate} UTC");
+            sb.AppendLine($" ▸ TLibrary  : {LibraryVersion}");
+            sb.AppendLine();
+            sb.AppendLine("[ Support ]");
+            sb.AppendLine(" ▸ Report issues or request features:");
+            sb.AppendLine(" ▸ https://github.com/TavstalDev/TSkinManager/issues");
+            sb.AppendLine();
+            sb.AppendLine("────────────────────────────────────────────────────────");
+            Logger.Log(ELogLevel.COMMAND, sb.ToString(), includePrefixes: false, color:  ConsoleColor.Cyan);
+        }
 
-            Logger.Log("████████╗░██████╗██╗░░██╗██╗███╗░░██╗███╗░░░███╗███╗░░██╗░██████╗░", ConsoleColor.Cyan, prefix: null);
-            Logger.Log("╚══██╔══╝██╔════╝██║░██╔╝██║████╗░██║████╗░████║████╗░██║██╔════╝░", ConsoleColor.Cyan, prefix: null);
-            Logger.Log("░░░██║░░░╚█████╗░█████═╝░██║██╔██╗██║██╔████╔██║██╔██╗██║██║░░██╗░", ConsoleColor.Cyan, prefix: null);
-            Logger.Log("░░░██║░░░░╚═══██╗██╔═██╗░██║██║╚████║██║╚██╔╝██║██║╚████║██║░░╚██╗", ConsoleColor.Cyan, prefix: null);
-            Logger.Log("░░░██║░░░██████╔╝██║░╚██╗██║██║░╚███║██║░╚═╝░██║██║░╚███║╚██████╔╝", ConsoleColor.Cyan, prefix: null);
-            Logger.Log("░░░╚═╝░░░╚═════╝░╚═╝░░╚═╝╚═╝╚═╝░░╚══╝╚═╝░░░░░╚═╝╚═╝░░╚══╝░╚═════╝░", ConsoleColor.Cyan, prefix: null);
-            Logger.Log("#########################################", prefix: null);
-            Logger.Log("#       Thanks for using this plugin!   #", prefix: null);
-            Logger.Log("#########################################", prefix: null);
-            Logger.Log("# Developed By: Tavstal", prefix: null);
-            Logger.Log("# Discord:      @Tavstal", prefix: null);
-            Logger.Log("# Website:      https://redstoneplugins.com", prefix: null);
-            Logger.Log("# My GitHub:    https://tavstaldev.github.io", prefix: null);
-            Logger.Log("#########################################", prefix: null);
-            Logger.Log($"# Plugin Version:    {Version}", prefix: null);
-            Logger.Log($"# Build Date:        {BuildDate}", prefix: null);
-            Logger.Log($"# TLibrary Version:  {LibraryVersion}", prefix: null);
-            Logger.Log("#########################################", prefix: null);
-            Logger.Log("# Found an issue or have a suggestion?", prefix: null);
-            Logger.Log("# Report it here: https://github.com/TavstalDev/TSkingManager/issues", prefix: null); 
-            Logger.Log("#########################################", prefix: null);
-
+        /// <summary>
+        /// Subscribes to the player join event to enable cosmetic enforcement.
+        /// </summary>
+        public override void OnLoad()
+        {
             try
             {
                 UnturnedPermissions.OnJoinRequested += PlayerConnectPending;
-                Logger.Log("# TSKinManager has been loaded.");
+                Logger.Info($"# {Name} has been successfully loaded.");
             }
             catch (Exception ex)
             {
-                Logger.Exception("# Failed to load TSKinManager...");
-                Logger.Error(ex);
+                Logger.Error($"# Failed to load {Name}...", ex);
             }
-           
         }
 
+        /// <summary>
+        /// Unsubscribes from the player join event during plugin unload.
+        /// </summary>
         public override void OnUnLoad()
         {
             UnturnedPermissions.OnJoinRequested -= PlayerConnectPending;
-            Logger.Log("# TSkinManager has been unloaded");
+            Logger.Info($"# {Name} has been successfully unloaded.");
         }
 
+        /// <summary>
+        /// Handles pending player connections by enforcing cosmetic rules.
+        /// Applies skin color filtering, custom skins, event skins, and slot restrictions
+        /// based on the plugin configuration.
+        /// </summary>
+        /// <param name="player">Steam ID of the connecting player.</param>
+        /// <param name="rej">Rejection reason, can be set to reject the player.</param>
         public void PlayerConnectPending(CSteamID player, ref ESteamRejection? rej)
         {
             foreach (SteamPending steamPending in Provider.pending)
@@ -90,7 +121,7 @@ namespace Tavstal.TSkinManager
                         steamPending.GetType().GetField("_skin", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(steamPending, color);
                     }
 
-                    CustomSkin skin = Config.CustomSkins.FirstOrDefault(x => x.Player == steamPending.playerID.steamID.m_SteamID);
+                    CustomSkin? skin = Config.CustomSkins.FirstOrDefault(x => x.Player == steamPending.playerID.steamID.m_SteamID);
                     if (skin != null)
                     {
                         steamPending.hatItem = skin.Hat;
@@ -104,7 +135,7 @@ namespace Tavstal.TSkinManager
                         return;
                     }
 
-                    Event ev = Config.EventSkins.FirstOrDefault(x => x.StartDayOfTheYear <= DateTime.Now.DayOfYear && x.EndDayOfTheYear > DateTime.Now.DayOfYear);
+                    Event? ev = Config.EventSkins.FirstOrDefault(x => x.StartDayOfTheYear <= DateTime.Now.DayOfYear && x.EndDayOfTheYear > DateTime.Now.DayOfYear);
                     if (ev != null)
                     {
                         if (ev.Skins.Count > 0)
@@ -126,49 +157,49 @@ namespace Tavstal.TSkinManager
                     if (PermissionHelper.HasPermission(player, Config.BypassPermission))
                         return;
 
-                    if (Config.RestrictWeaponSkins)
+                    if (Config.Restrictions.WeaponSkins)
                     {
                         steamPending.skinItems = Array.Empty<int>();
                         steamPending.packageSkins = Array.Empty<ulong>();
                     }
 
-                    if (Config.RestrictBackpacks)
+                    if (Config.Restrictions.Backpacks)
                     {
                         steamPending.packageBackpack = 0UL;
                         steamPending.backpackItem = 0;
                     }
 
-                    if (Config.RestrictHats)
+                    if (Config.Restrictions.Hats)
                     {
                         steamPending.packageHat = 0UL;
                         steamPending.hatItem = 0;
                     }
 
-                    if (Config.RestrictMasks)
+                    if (Config.Restrictions.Masks)
                     {
                         steamPending.packageMask = 0UL;
                         steamPending.maskItem = 0;
                     }
 
-                    if (Config.RestrictPants)
+                    if (Config.Restrictions.Pants)
                     {
                         steamPending.packagePants = 0UL;
                         steamPending.pantsItem = 0;
                     }
 
-                    if (Config.RestrictGlasses)
+                    if (Config.Restrictions.Glasses)
                     {
                         steamPending.glassesItem = 0;
                         steamPending.packageGlasses = 0UL;
                     }
 
-                    if (Config.RestrictShirts)
+                    if (Config.Restrictions.Shirts)
                     {
                         steamPending.packageShirt = 0UL;
                         steamPending.shirtItem = 0;
                     }
 
-                    if (Config.RestrictVests)
+                    if (Config.Restrictions.Vests)
                     {
                         steamPending.packageVest = 0UL;
                         steamPending.vestItem = 0;

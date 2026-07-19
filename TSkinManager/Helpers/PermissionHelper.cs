@@ -8,15 +8,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Tavstal.TLibrary.Extensions;
 
 namespace Tavstal.TSkinManager.Helpers
 {
     /// <summary>
     /// A static class providing helper methods for managing permissions in the RocketMod environment.
     /// </summary>
-    /// <remarks>
-    /// This class interacts with the RocketPermissionsManager to retrieve information about player groups, permissions, and defaults.
-    /// </remarks>
     public static class PermissionHelper
     {
         /// <summary>
@@ -25,27 +23,26 @@ namespace Tavstal.TSkinManager.Helpers
         static RocketPermissionsManager PermissionsManager => R.Instance.GetComponent<RocketPermissionsManager>();
 
         /// <summary>
-        /// Retrieves the default group ID from the permissions manager.
+        /// Retrieves the default group ID from the permissions' manager.
         /// </summary>
         /// <returns>
         /// The default group ID if found, or an empty string if an error occurs.
         /// </returns>
-        private static string GetDefaultGroupID()
+        private static string? GetDefaultGroupID()
         {
             try
             {
-                FieldInfo helperFieldInfo = PermissionsManager.GetType().GetField("helper", BindingFlags.NonPublic | BindingFlags.Instance);
-                object helperObject = helperFieldInfo?.GetValue(PermissionsManager);
-                Type helperType = helperObject?.GetType();
-                Asset<RocketPermissions> permissions = (Asset<RocketPermissions>)(helperType?.GetField("permissions", BindingFlags.NonPublic | BindingFlags.Instance)?.GetValue(helperObject));
+                FieldInfo? helperFieldInfo = PermissionsManager.GetType().GetField("helper", BindingFlags.NonPublic | BindingFlags.Instance);
+                object? helperObject = helperFieldInfo?.GetValue(PermissionsManager);
+                Type? helperType = helperObject?.GetType();
+                Asset<RocketPermissions>? permissions = (Asset<RocketPermissions>)helperType?.GetField("permissions", BindingFlags.NonPublic | BindingFlags.Instance)?.GetValue(helperObject)!;
                 return permissions?.Instance.DefaultGroup;
             }
             catch (Exception ex)
             {
-                TSkinManager.Logger.Exception("Failed to retrieve default group ID from permissions manager.");
-                TSkinManager.Logger.Error(ex.ToString());
+                TSkinManager.Logger.Error("Failed to retrieve default group ID from permissions manager.", ex);
+                return null;
             }
-            return string.Empty;
         }
 
         /// <summary>
@@ -54,25 +51,23 @@ namespace Tavstal.TSkinManager.Helpers
         /// <returns>
         /// A list of <see cref="RocketPermissionsGroup"/> representing the available permission groups.
         /// </returns>
-        private static List<RocketPermissionsGroup> GetPermissionsGroups()
+        private static List<RocketPermissionsGroup>? GetPermissionsGroups()
         {
             try
             {
-                FieldInfo helperFieldInfo = PermissionsManager.GetType().GetField("helper", BindingFlags.NonPublic | BindingFlags.Instance);
-                object helperObject = helperFieldInfo?.GetValue(PermissionsManager);
-                Type helperType = helperObject?.GetType();
+                FieldInfo? helperFieldInfo = PermissionsManager.GetType().GetField("helper", BindingFlags.NonPublic | BindingFlags.Instance);
+                object? helperObject = helperFieldInfo?.GetValue(PermissionsManager);
+                Type? helperType = helperObject?.GetType();
                 if (helperType == null)
                     return new List<RocketPermissionsGroup>();
-                Asset<RocketPermissions> permissions = (Asset<RocketPermissions>)(helperType.GetField("permissions", BindingFlags.NonPublic | BindingFlags.Instance)?.GetValue(helperObject));
+                Asset<RocketPermissions>? permissions = (Asset<RocketPermissions>)helperType.GetField("permissions", BindingFlags.NonPublic | BindingFlags.Instance)?.GetValue(helperObject)!;
                 return permissions?.Instance.Groups;
             }
             catch (Exception ex)
             {
-                TSkinManager.Logger.Exception("Failed to retrieve permission groups from permissions manager.");
-                TSkinManager.Logger.Error(ex.ToString());
+                TSkinManager.Logger.Error("Failed to retrieve permission groups from permissions manager.", ex);
+                return null;
             }
-
-            return new List<RocketPermissionsGroup>();
         }
         
         /// <summary>
@@ -84,8 +79,12 @@ namespace Tavstal.TSkinManager.Helpers
         /// </returns>
         private static List<RocketPermissionsGroup> GetPlayerGroups(CSteamID steamID)
         {
-            string defaultId = GetDefaultGroupID();
-            return GetPermissionsGroups().FindAll(x => x.Id == defaultId || x.Members.Contains(steamID.m_SteamID.ToString()));
+            string? defaultId = GetDefaultGroupID();
+            var permissions = GetPermissionsGroups();
+            if (defaultId == null || permissions == null)
+                return new List<RocketPermissionsGroup>();
+            
+            return permissions.FindAll(x => x.Id == defaultId || x.Members.Contains(steamID.m_SteamID.ToString()));
         }
 
         /// <summary>
