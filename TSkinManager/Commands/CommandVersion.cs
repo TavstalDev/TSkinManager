@@ -26,10 +26,16 @@ namespace Tavstal.TSkinManager.Commands
         /// <param name="command">Command arguments (unused).</param>
         public void Execute(IRocketPlayer caller, string[] command)
         {
-            TSkinManager.Instance.SendPlainCommandReply(caller, "#########################################");
-            TSkinManager.Instance.SendPlainCommandReply(caller, $"# Build Version: {TSkinManager.Version}");
-            TSkinManager.Instance.SendPlainCommandReply(caller, $"# Build Date: {TSkinManager.BuildDate}");
-            TSkinManager.Instance.SendPlainCommandReply(caller, "#########################################");
+            var instance = TSkinManager.Instance;
+            var config = instance.Config.General;
+            var icon = config.MessageIcon;
+            string message = string.Join(System.Environment.NewLine, 
+                $"&b&l[{instance.GetPluginName()}]&r System Info:",
+                $"&b • Version: &r{TSkinManager.Version}",
+                $"&b • Build Date: &r{TSkinManager.BuildDate}",
+                "&b • Developer: &rTavstal");
+            
+            instance.SendPlainCommandReply(caller, message, icon);
         }
     }
 }
