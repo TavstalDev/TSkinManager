@@ -36,7 +36,7 @@ namespace Tavstal.TSkinManager.Helpers
                 object? helperObject = helperFieldInfo?.GetValue(PermissionsManager);
                 Type? helperType = helperObject?.GetType();
                 Asset<RocketPermissions>? permissions = (Asset<RocketPermissions>)helperType?.GetField("permissions", BindingFlags.NonPublic | BindingFlags.Instance)?.GetValue(helperObject)!;
-                return permissions?.Instance.DefaultGroup;
+                return permissions.Instance.DefaultGroup;
             }
             catch (Exception ex)
             {
@@ -61,7 +61,7 @@ namespace Tavstal.TSkinManager.Helpers
                 if (helperType == null)
                     return new List<RocketPermissionsGroup>();
                 Asset<RocketPermissions>? permissions = (Asset<RocketPermissions>)helperType.GetField("permissions", BindingFlags.NonPublic | BindingFlags.Instance)?.GetValue(helperObject)!;
-                return permissions?.Instance.Groups;
+                return permissions.Instance.Groups;
             }
             catch (Exception ex)
             {

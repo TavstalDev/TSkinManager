@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Tavstal.TLibrary.Models.Config;
-using Tavstal.TLibrary.Models.Logging;
 using Tavstal.TSkinManager.Models;
 using YamlDotNet.Serialization;
 // ReSharper disable ClassNeverInstantiated.Global
@@ -13,41 +12,32 @@ namespace Tavstal.TSkinManager
     /// </summary>
     public class TSkinManagerConfig : YamlConfiguration
     {
-        /// <summary>Which cosmetic slots are restricted for non-bypassed players.</summary>
         [YamlMember(Order = 7, Description = "Which cosmetic slots are restricted for non-bypassed players.")]
-        public RestrictionConfig  Restrictions;
+        public RestrictionConfig  Restrictions { get; set; }
         
-        /// <summary>Whether to replace disallowed skin colors with a random allowed color.</summary>
         [YamlMember(Order = 8, Description = "Whether to replace disallowed skin colors with a random allowed color.")]
-        public bool ReplaceNotAllowedSkins;
+        public bool ReplaceNotAllowedSkins { get; set; }
         
-        /// <summary>Permission node that allows players to bypass all cosmetic restrictions.</summary>
-        [YamlMember(Order = 9, Description = "Permission node that allows players to bypass all cosmetic restrictions.")]
-        public string BypassPermission;
+        [YamlMember(Order = 9, Description = "Time-based events that assign random cosmetic loadouts during specific day ranges.")]
+        public List<Event> EventSkins { get; set; }
         
-        /// <summary>Time-based events that assign random cosmetic loadouts during specific day ranges.</summary>
-        [YamlMember(Order = 10, Description = "Time-based events that assign random cosmetic loadouts during specific day ranges.")]
-        public List<Event> EventSkins;
+        [YamlMember(Order = 10, Description = "Per-player forced cosmetic loadouts, keyed by Steam ID.")]
+        public List<CustomSkin> CustomSkins { get; set; }
         
-        /// <summary>Per-player forced cosmetic loadouts, keyed by Steam ID.</summary>
-        [YamlMember(Order = 11, Description = "Per-player forced cosmetic loadouts, keyed by Steam ID.")]
-        public List<CustomSkin> CustomSkins;
-        
-        /// <summary>Hex color strings that players are allowed to use as their skin color.</summary>
-        [YamlMember(Order = 12, Description = "Hex color strings that players are allowed to use as their skin color.")]
-        public List<string> AllowedSkinColorsHex;
+        [YamlMember(Order = 11, Description = "Hex color strings that players are allowed to use as their skin color.")]
+        public List<string> AllowedSkinColorsHex { get; set; }
 
         /// <summary>
         /// Populates the configuration with default values including sample events and allowed skin colors.
         /// </summary>
         public override void LoadDefaults()
         {
-            Locale = "en";
-            LogLevel = ELogLevel.INFO;
-            DownloadLocalePacks = true;
+            General = new GeneralConfig
+            {
+                MessageIcon = "https://raw.githubusercontent.com/TavstalDev/TSkinManager/refs/heads/master/assets/icon.png"
+            };
             Restrictions = new RestrictionConfig();
             ReplaceNotAllowedSkins = true;
-            BypassPermission = "skinmanager.bypass";
             EventSkins = new List<Event>
             {
                 new Event { EventName = "Christmas", StartDayOfTheYear = 358, EndDayOfTheYear = 360, Skins = new List<EventSkin>
@@ -81,7 +71,6 @@ namespace Tavstal.TSkinManager
         public TSkinManagerConfig()
         {
             Restrictions = new RestrictionConfig();
-            BypassPermission = "skinmanager.bypass";
             EventSkins = new List<Event>();
             CustomSkins = new List<CustomSkin>();
             AllowedSkinColorsHex = new List<string>();
@@ -95,7 +84,6 @@ namespace Tavstal.TSkinManager
         public TSkinManagerConfig(string filename, string path) : base(filename, path)
         {
             Restrictions = new RestrictionConfig();
-            BypassPermission = "skinmanager.bypass";
             EventSkins = new List<Event>();
             CustomSkins = new List<CustomSkin>();
             AllowedSkinColorsHex = new List<string>();            

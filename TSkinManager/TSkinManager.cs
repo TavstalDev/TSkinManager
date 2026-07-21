@@ -154,7 +154,7 @@ namespace Tavstal.TSkinManager
                         }
                     }
 
-                    if (PermissionHelper.HasPermission(player, Config.BypassPermission))
+                    if (Config.Restrictions.EnableBypass && PermissionHelper.HasPermission(player, Config.Restrictions.BypassPermission))
                         return;
 
                     if (Config.Restrictions.WeaponSkins)
